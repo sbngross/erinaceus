@@ -1,0 +1,17 @@
+import core.*;
+#
+int x = 42;
+int y = 1337;
+Dummy d;
+#create
+d = new Dummy();
+
+@d != null
+#set
+d.set($.x);
+
+@d.get() == $.x
+#add
+d.inc($.y);
+
+@d.get() == ($.x + $.y)
