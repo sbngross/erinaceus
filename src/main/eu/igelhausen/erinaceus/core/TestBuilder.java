@@ -43,7 +43,6 @@ public class TestBuilder
 	{
 		return ""
 				+ "package cases;"
-				+ "import helper.*;"
 				+ "import eu.igelhausen.erinaceus.core.*;"
 				+ iSection
 				+ "public class "

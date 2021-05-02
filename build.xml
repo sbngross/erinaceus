@@ -2,8 +2,11 @@
 
 	<property name="tool.name" value="${ant.project.name}" />
 	<property name="tool.lower.name" value="erinaceus" />
+	<property name="domain" value="eu.igelhausen" />
+	<property name="package.prefix" value="${domain}.${tool.lower.name}" />
 	<property name="tool.version" value="0.0.0" />
-	<property name="tool.release.filename" value="${tool.lower.name}-${tool.version}.jar" />
+	<property name="exe.runner.filename" value="${tool.lower.name}-runner.jar" />
+	<property name="exe.creator.filename" value="${tool.lower.name}-creator.jar" />
 
 	<property name="top.dir" location="." />
 	<property name="src.dir" location="src" />
@@ -13,6 +16,9 @@
 	<property name="target.dir" location="target" />
 	<property name="bin.dir" location="${target.dir}/bin" />
 	<property name="release.dir" location="${target.dir}/release/${tool.version}" />
+
+	<property name="test.input.dir" location="test/input" />
+	<property name="test.src.dir" location="${src.dir}/test" />
 
 	<echo>
 		Application  : ${tool.name}
@@ -36,12 +42,25 @@
 
 	<target name="purge">
 		<delete dir="${target.dir}" />
+		<delete dir="${test.src.dir}" />
 	</target>
 
 	<target name="compile" depends="clean">
 		<mkdir dir="${bin.dir}" />
 
-		<javac srcdir="${src.dir}" destdir="${bin.dir}" includeantruntime="true" nowarn="yes" debug="true" />
+		<javac srcdir="${java.dir}" destdir="${bin.dir}" includeantruntime="true" nowarn="yes" debug="true" />
+	</target>
+
+	<target name="write-tests" depends="build-creator">
+		<mkdir dir="${test.src.dir}/cases" />
+
+		<java jar="${release.dir}/${exe.creator.filename}" fork="true" />
+	</target>
+
+	<target name="compile-tests" depends="compile,write-tests">
+		<mkdir dir="${bin.dir}" />
+
+		<javac srcdir="${test.src.dir}" destdir="${bin.dir}" includeantruntime="false" nowarn="no" debug="false" />
 	</target>
 
 	<target name="compile-examples" depends="compile">
@@ -56,9 +75,24 @@
 		<javac srcdir="${java.dir}" destdir="${bin.dir}" includeantruntime="false" nowarn="no" debug="false" />
 	</target>
 
-	<target name="build" depends="compile-release">
-		<jar jarfile="${release.dir}/${tool.release.filename}" basedir="${bin.dir}" />
+	<target name="build-creator" depends="compile-release">
+		<jar jarfile="${release.dir}/${exe.creator.filename}" basedir="${bin.dir}" >
+			<manifest>
+				<attribute name="Main-Class" value="${package.prefix}.core.TestBuilder" />
+			</manifest>
+		</jar>
 	</target>
+
+	<target name="build-runner" depends="compile-release">
+		<jar jarfile="${release.dir}/${exe.runner.filename}" basedir="${bin.dir}" >
+			<manifest>
+				<attribute name="Main-Class" value="${package.prefix}.core.TestRunner" />
+				<attribute name="Class-Path" value="target/bin" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="build" depends="build-creator,build-runner" />
 
 	<target name="release" depends="purge,build" />
 
