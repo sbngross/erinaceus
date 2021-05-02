@@ -1,10 +1,11 @@
 package eu.igelhausen.erinaceus.core;
 import java.util.*;
+import java.util.Map.Entry;
 
 public abstract class ATestCase
 {
 	protected String name;
-	private Vector<ITestStep> steps = new Vector<ITestStep>();
+	private Map<String,ITestStep> steps = new LinkedHashMap<String, ITestStep>();
 
 	protected ATestCase()
 	{
@@ -14,9 +15,9 @@ public abstract class ATestCase
 
 	public abstract void setup();
 	
-	public void addStep(ITestStep step)
+	public void addStep(String stepName, ITestStep stepDef)
 	{
-		this.steps.add(step);
+		this.steps.put(stepName, stepDef);
 	}
 
 	private ETestOutcome executeStep(ITestStep step)
@@ -36,10 +37,10 @@ public abstract class ATestCase
 		
 		Vector<ETestOutcome> outcomes = new Vector<ETestOutcome>(this.steps.size());
 		
-		for (ITestStep step : this.steps)
+		for (Entry<String, ITestStep> step : this.steps.entrySet())
 		{
-			ETestOutcome out = executeStep(step);
-			System.out.println("|-> " + out);
+			ETestOutcome out = executeStep(step.getValue());
+			System.out.println("|-> "+ step.getKey() + ": " + out);
 						
 			outcomes.add(out);
 		}

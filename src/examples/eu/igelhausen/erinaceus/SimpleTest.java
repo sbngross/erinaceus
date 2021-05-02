@@ -1,6 +1,7 @@
 package eu.igelhausen.erinaceus;
 
 import eu.igelhausen.erinaceus.core.*;
+import helper.*;
 
 public class SimpleTest extends ATestCase
 {
@@ -11,17 +12,17 @@ public class SimpleTest extends ATestCase
 	@Override
 	public void setup()
 	{
-		addStep((testCase) -> {
+		addStep("add",(testCase) -> {
 			SimpleTest $ = (SimpleTest) testCase;
 			$.y += $.x;
 			return ETestOutcome.PASS;
 		});
 
-		addStep((c) -> {
+		addStep("skip", (c) -> {
 			return ETestOutcome.SKIP;
 		});
 
-		addStep((c) -> {
+		addStep("check",(c) -> {
 			SimpleTest $ = (SimpleTest) c;
 			if ($.y == 1379)
 				return ETestOutcome.PASS;
