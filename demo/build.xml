@@ -55,25 +55,28 @@
 	<target name="write-tests" >
 		<mkdir dir="${test.src.dir}/cases" />
 
-		<java jar="test/${exe.creator.filename}" fork="true" />
+		<java jar="test/erinaceus.jar" fork="true" >
+			<arg value="parse" />
+		</java>
 	</target>
 
-	<target name="compile-tests" depends="compile,write-tests">
+	<target name="compile-tests" depends="compile">
 		<mkdir dir="${bin.dir}" />
 
 		<javac srcdir="${test.src.dir}" destdir="${bin.dir}" includeantruntime="false" nowarn="no" debug="false" >
 			<classpath>
-				<pathelement path="test/erinaceus-runner.jar" />
+				<pathelement path="test/erinaceus.jar" />
 			</classpath>
 		</javac>
 	</target>
 
 	<target name="run-tests" depends="compile-tests" >
-		<java classname="eu.igelhausen.erinaceus.TestRunner" >
+		<java classname="eu.igelhausen.erinaceus.Main" >
 			<classpath>
-				<pathelement path="test/erinaceus-runner.jar" />
+				<pathelement path="test/erinaceus.jar" />
 				<pathelement path="${bin.dir}" />
 			</classpath>
+			<arg value="run" />
 		</java>
 	</target>
 

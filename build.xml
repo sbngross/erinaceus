@@ -5,9 +5,7 @@
 	<property name="domain" value="eu.igelhausen" />
 	<property name="package.prefix" value="${domain}.${tool.lower.name}" />
 	<property name="tool.version" value="0.0.0" />
-	<property name="exe.runner.filename" value="${tool.lower.name}-runner.jar" />
-	<property name="exe.creator.filename" value="${tool.lower.name}-creator.jar" />
-	<property name="exe.lib.filename" value="${tool.lower.name}-lib.jar" />
+	<property name="tool.jar" value="${tool.lower.name}.jar" />
 
 	<property name="top.dir" location="." />
 	<property name="src.dir" location="src" />
@@ -54,28 +52,13 @@
 		<javac srcdir="${java.dir}" destdir="${bin.dir}" includeantruntime="false" nowarn="no" debug="false" />
 	</target>
 
-	<target name="build-creator" depends="compile-release">
-		<jar jarfile="${release.dir}/${exe.creator.filename}" basedir="${bin.dir}" >
+	<target name="build" depends="compile-release">
+		<jar jarfile="${release.dir}/${tool.jar}" basedir="${bin.dir}" >
 			<manifest>
-				<attribute name="Main-Class" value="${package.prefix}.TestBuilder" />
+				<attribute name="Main-Class" value="${package.prefix}.Main" />
 			</manifest>
 		</jar>
 	</target>
-
-	<target name="build-runner" depends="compile-release">
-		<jar jarfile="${release.dir}/${exe.runner.filename}" basedir="${bin.dir}" >
-			<manifest>
-				<attribute name="Main-Class" value="${package.prefix}.TestRunner" />
-				<attribute name="Class-Path" value="." />
-			</manifest>
-		</jar>
-	</target>
-
-	<target name="build-lib" depends="compile-release">
-		<jar jarfile="${release.dir}/${exe.lib.filename}" basedir="${bin.dir}" />
-	</target>
-
-	<target name="build" depends="build-creator,build-runner" />
 
 	<target name="release" depends="purge,build" />
 

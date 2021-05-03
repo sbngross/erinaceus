@@ -25,10 +25,9 @@ public class TestRunner
 		return c;
 	}
 
-	public static void main (String[] args) throws Exception
+	public TestRunner() throws Exception
 	{
-		ATestCase t = runGame("cases.SimpleTest2");
-
-		System.out.println(t.execute());
+			ATestCase t = runGame("cases.SimpleTest2");
+			t.execute();
 	}
 }

@@ -2,3 +2,4 @@
 target
 lib
 src/test/cases
+*.jar

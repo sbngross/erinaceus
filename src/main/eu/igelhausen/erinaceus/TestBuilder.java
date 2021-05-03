@@ -6,17 +6,17 @@ import eu.igelhausen.erinaceus.core.*;
 
 public class TestBuilder
 {
-	static StringBuilder builder;
+	StringBuilder builder;
 
-	static String iSection;
+	String iSection;
 
-	static String pSection;
+	String pSection;
 
-	static String tSection;
+	String tSection;
 
-	static String name;
+	String name;
 
-	static String buildStep()
+	String buildStep()
 	{
 		String def = "$.y += $.x; System.out.println($.y);";
 
@@ -41,7 +41,7 @@ public class TestBuilder
 				+ "";
 	}
 
-	static String buildCase()
+	String buildCase()
 	{
 		return ""
 				+ "package cases;"
@@ -61,7 +61,7 @@ public class TestBuilder
 				+ "";
 	}
 
-	public static void main(String[] args) throws Exception
+	public TestBuilder() throws Exception
 	{
 		iSection = "";
 
@@ -79,6 +79,5 @@ public class TestBuilder
 		w.flush();
 
 		w.close();
-
 	}
 }
