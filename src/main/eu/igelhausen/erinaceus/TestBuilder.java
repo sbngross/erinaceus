@@ -1,6 +1,8 @@
-package eu.igelhausen.erinaceus.core;
+package eu.igelhausen.erinaceus;
 
-import java.io.FileWriter;
+import java.io.*;
+
+import eu.igelhausen.erinaceus.core.*;
 
 public class TestBuilder
 {

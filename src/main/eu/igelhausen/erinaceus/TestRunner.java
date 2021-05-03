@@ -1,6 +1,8 @@
-package eu.igelhausen.erinaceus.core;
+package eu.igelhausen.erinaceus;
 
 import java.lang.reflect.*;
+
+import eu.igelhausen.erinaceus.core.*;
 
 public class TestRunner
 {
