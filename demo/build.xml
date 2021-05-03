@@ -7,6 +7,7 @@
 	<property name="tool.version" value="0.0.0" />
 	<property name="exe.runner.filename" value="${tool.lower.name}-runner.jar" />
 	<property name="exe.creator.filename" value="${tool.lower.name}-creator.jar" />
+	<property name="exe.lib.filename" value="${tool.lower.name}-lib.jar" />
 
 	<property name="top.dir" location="." />
 	<property name="src.dir" location="src" />
@@ -57,14 +58,23 @@
 		<java jar="test/${exe.creator.filename}" fork="true" />
 	</target>
 
-	<target name="compile-tests" depends="write-tests">
+	<target name="compile-tests" depends="compile,write-tests">
 		<mkdir dir="${bin.dir}" />
 
 		<javac srcdir="${test.src.dir}" destdir="${bin.dir}" includeantruntime="false" nowarn="no" debug="false" >
 			<classpath>
-				<path location="test/{exe.runner.filename}.jar"/>
+				<pathelement path="test/erinaceus-runner.jar" />
 			</classpath>
 		</javac>
+	</target>
+
+	<target name="run-tests" depends="compile-tests" >
+		<java classname="eu.igelhausen.erinaceus.TestRunner" >
+			<classpath>
+				<pathelement path="test/erinaceus-runner.jar" />
+				<pathelement path="${bin.dir}" />
+			</classpath>
+		</java>
 	</target>
 
 </project>
