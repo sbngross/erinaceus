@@ -28,6 +28,9 @@ public class TestRunner
 	public TestRunner() throws Exception
 	{
 			ATestCase t = runGame("cases.SimpleTest2");
-			t.execute();
+			ETestOutcome o = t.execute();
+
+			if (ETestOutcome.FAIL == o)
+				System.exit(1);
 	}
 }
