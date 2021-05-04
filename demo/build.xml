@@ -5,18 +5,14 @@
 	<property name="domain" value="eu.igelhausen" />
 	<property name="package.prefix" value="${domain}.${tool.lower.name}" />
 	<property name="tool.version" value="0.0.0" />
-	<property name="exe.runner.filename" value="${tool.lower.name}-runner.jar" />
-	<property name="exe.creator.filename" value="${tool.lower.name}-creator.jar" />
-	<property name="exe.lib.filename" value="${tool.lower.name}-lib.jar" />
+	<property name="release.dir" location="${target.dir}/release/${tool.version}" />
 
 	<property name="top.dir" location="." />
 	<property name="src.dir" location="src" />
 	<property name="java.dir" location="${src.dir}/main" />
-	<property name="examples.dir" location="${src.dir}/examples" />
 
 	<property name="target.dir" location="target" />
 	<property name="bin.dir" location="${target.dir}/bin" />
-	<property name="release.dir" location="${target.dir}/release/${tool.version}" />
 
 	<property name="test.input.dir" location="test/input" />
 	<property name="test.src.dir" location="${src.dir}/test" />
@@ -71,7 +67,7 @@
 	</target>
 
 	<target name="run-tests" depends="compile-tests" >
-		<java classname="eu.igelhausen.erinaceus.Main" >
+		<java classname="eu.igelhausen.erinaceus.Main" failonerror="true" >
 			<classpath>
 				<pathelement path="test/erinaceus.jar" />
 				<pathelement path="${bin.dir}" />
