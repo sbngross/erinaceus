@@ -1,18 +1,7 @@
-#IMPORT>>>
-#<<<
-#PRELUDE>>>
-	private int x = 42;
-	private int y = 1337;
-#<<<
-#STEPS>>>
-	##add:PASS>>>
-		$.y += $.x;
-	#<<<
-	##skip>>>
-	@SKIP
-	#<<<
-	##check:FAIL>>>
-		if ($.y == 1379)
-		@PASS
-	#<<<
-#<<<
+#IMPORT
+import core.*;
+#PRELUDE
+int x = 42;
+int y = 1337;
+#add
+@($.y + $.x) == 1379
