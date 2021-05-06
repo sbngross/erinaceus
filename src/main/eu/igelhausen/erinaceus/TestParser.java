@@ -4,7 +4,7 @@ import java.io.*;
 
 import eu.igelhausen.erinaceus.core.*;
 
-public class TestBuilder
+public class TestParser
 {
 	StringBuilder builder;
 
@@ -14,70 +14,76 @@ public class TestBuilder
 
 	String tSection;
 
-	String name;
+	String className;
 
-	String buildStep()
+	String buildStep(String classname, String def, String sName)
 	{
-		String def = "$.y += $.x; System.out.println($.y);";
+		def = def.replaceAll("@(.*$)", "if (!($1)) return ETestOutcome.FAIL;");
 
-		String sName = "add";
-
-		String auto = "PASS";
 		return ""
 				+ "		addStep("
 				+ "\""
 				+ sName
 				+ "\""
 				+ ",(testCase) -> {"
-				+ name
+				+ className
 				+ " $ = ("
-				+ name
+				+ className
 				+ ") testCase;"
 				+ def
-				+ "			return ETestOutcome."
-				+ auto
-				+ ";"
+				+ "return ETestOutcome.PASS;"
 				+ "		});"
 				+ "";
 	}
 
-	String buildCase()
+	public TestParser(String fileName) throws Exception
 	{
-		return ""
-				+ "package cases;"
-				+ "import eu.igelhausen.erinaceus.core.*;"
-				+ iSection
-				+ "public class "
-				+ name
-				+ " extends ATestCase"
-				+ "{"
-				+ pSection
-				+ "	@Override"
-				+ "	public void setup()"
-				+ "	{"
-				+ tSection
-				+ "	}"
-				+ "}"
-				+ "";
-	}
+		String PATH = "test/input/";
+		String EXTENSION = "\\.etd";
 
-	public TestBuilder() throws Exception
-	{
-		iSection = "";
+		className = fileName.replaceAll(PATH, "");
+		className = className.replaceAll(EXTENSION,"");
 
-		name = "SimpleTest2";
-
-		pSection = "private int x=42; private int y=1337;";
-
-		tSection = buildStep();
+		FileReader fileReader = new FileReader(fileName);
+		BufferedReader reader = new BufferedReader(fileReader);
+		String line;
 
 		FileWriter w = new FileWriter("src/test/cases/"
-				+ name
+				+ className
 				+ ".java");
+		PrintWriter writer = new PrintWriter(w);
+		
+		writer.println("package cases;");
+		writer.println("import eu.igelhausen.erinaceus.core.*;");
+		line =  reader.readLine();
 
-		w.write(buildCase());
-		w.flush();
+		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
+		{
+			writer.println(line);
+		}
 
+		writer.println("public class " + className + " extends ATestCase {" );
+
+		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
+		{
+			writer.println(line);
+		}
+
+		writer.println( "@Override");
+		writer.println( "	public void setup() {");
+
+		builder = new StringBuilder();
+			String sName = line.replaceAll("#([a-z]*)", "$1");
+		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
+		{
+			builder.append(line);
+		}
+		writer.println(buildStep(className, builder.toString(), sName));
+
+		writer.println("}");
+		writer.println("}");
+
+		writer.close();
 		w.close();
 	}
 }

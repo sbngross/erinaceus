@@ -27,7 +27,7 @@ public class TestRunner
 
 	public TestRunner() throws Exception
 	{
-			ATestCase t = runGame("cases.SimpleTest2");
+			ATestCase t = runGame("cases.SimpleTest");
 			ETestOutcome o = t.execute();
 
 			if (ETestOutcome.FAIL == o)

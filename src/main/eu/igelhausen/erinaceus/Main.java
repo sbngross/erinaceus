@@ -11,7 +11,7 @@ public class Main
 
 		if (args[0].equals("parse"))
 		{
-			new TestBuilder();
+			new TestParser("test/input/SimpleTest.etd");
 		}
 	}
 }
