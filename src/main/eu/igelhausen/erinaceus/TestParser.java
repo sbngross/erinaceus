@@ -8,17 +8,21 @@ public class TestParser
 {
 	StringBuilder builder;
 
-	String iSection;
-
-	String pSection;
-
-	String tSection;
+	private BufferedReader reader;
+	private PrintWriter writer;
 
 	String className;
 
+	private boolean isRegular(String line)
+	{
+		if (line == null)
+			return false;
+
+		return (line.length() == 0 || line.charAt(0) != '#');
+	}
+
 	String buildStep(String classname, String def, String sName)
 	{
-		def = def.replaceAll("@(.*$)", "if (!($1)) return ETestOutcome.FAIL;");
 
 		return ""
 				+ "		addStep("
@@ -36,49 +40,71 @@ public class TestParser
 				+ "";
 	}
 
+	private void writeImport() throws Exception
+	{
+		String line;
+
+		writer.println("package cases;");
+		writer.println("import eu.igelhausen.erinaceus.core.*;");
+
+		while (isRegular((line = reader.readLine())))
+		{
+			writer.println(line);
+		}
+	}
+
+	private String writePreambel() throws Exception
+	{
+		String line;
+
+		writer.println("public class " + className + " extends ATestCase {" );
+
+		while (isRegular((line = reader.readLine())))
+		{
+			writer.println(line);
+		}
+
+		return line;
+	}
+
 	public TestParser(String fileName) throws Exception
 	{
 		String PATH = "test/input/";
 		String EXTENSION = "\\.etd";
 
+		String line;
+
 		className = fileName.replaceAll(PATH, "");
 		className = className.replaceAll(EXTENSION,"");
 
 		FileReader fileReader = new FileReader(fileName);
-		BufferedReader reader = new BufferedReader(fileReader);
-		String line;
+		reader = new BufferedReader(fileReader);
 
 		FileWriter w = new FileWriter("src/test/cases/"
 				+ className
 				+ ".java");
-		PrintWriter writer = new PrintWriter(w);
+		writer = new PrintWriter(w);
 		
-		writer.println("package cases;");
-		writer.println("import eu.igelhausen.erinaceus.core.*;");
-		line =  reader.readLine();
+		writeImport();
 
-		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
-		{
-			writer.println(line);
-		}
-
-		writer.println("public class " + className + " extends ATestCase {" );
-
-		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
-		{
-			writer.println(line);
-		}
+		line = writePreambel();
 
 		writer.println( "@Override");
 		writer.println( "	public void setup() {");
 
-		builder = new StringBuilder();
+		do
+		{	
+			builder = new StringBuilder();
 			String sName = line.replaceAll("#([a-z]*)", "$1");
-		while ((line = reader.readLine()) != null && line.charAt(0) != '#')
-		{
-			builder.append(line);
-		}
-		writer.println(buildStep(className, builder.toString(), sName));
+
+			while (isRegular((line = reader.readLine())))
+			{
+				builder.append(
+		line.replaceAll("@(.*$)", "if (!($1)) return ETestOutcome.FAIL;"));
+			}
+
+			writer.println(buildStep(className, builder.toString(), sName));
+		} while (line != null);
 
 		writer.println("}");
 		writer.println("}");

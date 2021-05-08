@@ -2,8 +2,20 @@ package core;
 
 public class Dummy
 {
-	public static int add(int x, int y)
+	int value = 0;
+
+	public void set(int x)
 	{
-		return x + y;
+		value = x;
+	}
+
+	public int get()
+	{
+		return value;
+	}
+
+	public void inc(int x)
+	{
+		value += x;
 	}
 }
