@@ -1,4 +1,4 @@
-<project name="Erinaceus" default="build" basedir=".">
+<project name="Erinaceus" default="run-tests" basedir=".">
 
 	<property name="tool.name" value="${ant.project.name}" />
 	<property name="tool.lower.name" value="erinaceus" />
@@ -53,7 +53,8 @@
 		<mkdir dir="${test.src.dir}/cases" />
 
 		<java jar="test/erinaceus.jar" fork="true" >
-			<arg value="parse" />
+			<arg value="write" />
+			<arg value="${test.input.dir}" />
 		</java>
 	</target>
 
@@ -67,13 +68,14 @@
 		</javac>
 	</target>
 
-	<target name="run-tests" depends="compile-tests" >
+	<target name="run-tests" depends="purge,compile-tests" >
 		<java classname="eu.igelhausen.erinaceus.Main" failonerror="true" >
 			<classpath>
 				<pathelement path="test/erinaceus.jar" />
 				<pathelement path="${bin.dir}" />
 			</classpath>
 			<arg value="run" />
+			<arg value="${bin.dir}/cases" />
 		</java>
 	</target>
 

@@ -4,7 +4,7 @@ import java.io.*;
 
 import eu.igelhausen.erinaceus.core.*;
 
-public class TestParser
+public class TestWriter
 {
 	StringBuilder builder;
 
@@ -13,7 +13,7 @@ public class TestParser
 
 	String className;
 
-	private boolean isRegular(String line)
+	private static boolean isRegular(String line)
 	{
 		if (line == null)
 			return false;
@@ -25,7 +25,7 @@ public class TestParser
 	{
 
 		return ""
-				+ "		addStep("
+				+ "addStep("
 				+ "\""
 				+ sName
 				+ "\""
@@ -67,17 +67,18 @@ public class TestParser
 		return line;
 	}
 
-	public TestParser(String fileName) throws Exception
+	public TestWriter(File file) throws Exception
 	{
-		String PATH = "test/input/";
 		String EXTENSION = "\\.etd";
 
 		String line;
 
-		className = fileName.replaceAll(PATH, "");
-		className = className.replaceAll(EXTENSION,"");
+		System.out.println(file.getName());
+		
+		className = file.getName().replaceAll(EXTENSION,"");
+		className = className + "Test";
 
-		FileReader fileReader = new FileReader(fileName);
+		FileReader fileReader = new FileReader(file);
 		reader = new BufferedReader(fileReader);
 
 		FileWriter w = new FileWriter("src/test/cases/"

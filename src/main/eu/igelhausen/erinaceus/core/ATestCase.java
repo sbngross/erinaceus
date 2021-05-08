@@ -40,7 +40,7 @@ public abstract class ATestCase
 		for (Entry<String, ITestStep> step : this.steps.entrySet())
 		{
 			ETestOutcome out = executeStep(step.getValue());
-			System.out.println("|-> "+ step.getKey() + ": " + out);
+			System.out.println("|-> "+ out + "\t(" + step.getKey() + ')');
 						
 			outcomes.add(out);
 		}
