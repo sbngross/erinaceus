@@ -74,7 +74,7 @@ public class TestWriter
 		String line;
 
 		System.out.println(file.getName());
-		
+
 		className = file.getName().replaceAll(EXTENSION,"");
 		className = className + "Test";
 
@@ -85,7 +85,7 @@ public class TestWriter
 				+ className
 				+ ".java");
 		writer = new PrintWriter(w);
-		
+
 		writeImport();
 
 		line = writePreambel();
@@ -94,14 +94,14 @@ public class TestWriter
 		writer.println( "	public void setup() {");
 
 		do
-		{	
+		{
 			builder = new StringBuilder();
 			String sName = line.replaceAll("#([a-z]*)", "$1");
 
 			while (isRegular((line = reader.readLine())))
 			{
 				builder.append(
-		line.replaceAll("@(.*$)", "if (!($1)) return ETestOutcome.FAIL;"));
+		line.replaceAll("@(.*$)", "{if (!($1)) return ETestOutcome.FAIL;}"));
 			}
 
 			writer.println(buildStep(className, builder.toString(), sName));
